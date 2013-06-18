@@ -1,0 +1,1 @@
+A proof of concept replicating basic rules of Ticket to Ride in Node.js.
