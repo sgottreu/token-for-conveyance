@@ -7,6 +7,7 @@ var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , train = require('./routes/train')
+  , route = require('./routes/route')
   , http = require('http')
   , path = require('path');
 
@@ -39,6 +40,9 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+
+app.get('/routes/list', route.list);
+
 app.get('/trains/list', train.list);
 app.get('/trains/:id/:color', train.pick);
 
