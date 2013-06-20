@@ -1,12 +1,4 @@
-
-/*
- * GET users listing.
- */
-
-/*
-var mongoose = require('mongoose')
-, Schema = mongoose.Schema;
-*/
+/**** Maybe this class https://github.com/chehabz/JavaScript-Dijkstra-Class */
 
 var Route = require('../app/models/Route');
 var City = require('../app/models/City');
