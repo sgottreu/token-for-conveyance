@@ -11,7 +11,6 @@ exports.list = function(req, res){
 
     var cities = City.getCitiesById();
     var routes = Route.getRoutes();
-/*
     var tmp = new Object;
 
     for(x=0;x<routes.length;x++)
@@ -22,15 +21,18 @@ exports.list = function(req, res){
     
         for(y=0;y<routes.length;y++)
         {
-            if(routes[x][y] !== Infinity && routes[x][y] !== 0) {
+            console.log('routes['+x+']['+y+'] = '+ routes[x][y]+';');
+        
+            /*
+if(routes[x][y] !== Infinity && routes[x][y] !== 0) {
                 tmp[cities[x+1]][cities[y+1]] = routes[x][y];
             }
             if (y == 35 && routes[x][y] === undefined) { console.log(x);}
+*/
         }
     
     }
     console.log(tmp);
-*/
 
     var paths = City.getPaths();
     
