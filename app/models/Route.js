@@ -1469,3 +1469,132 @@ console.log('vertex[v]',vertex[v]);
     
     return { distance: dist, route: previous } ;
 }
+
+
+
+
+/*
+
+
+
+var citiesById = new Array();
+citiesById[1] ='Atlanta';
+citiesById[2] ='Boston';
+citiesById[3] ='Calgary';
+citiesById[4] ='Charleston';
+citiesById[5] ='Chicago';
+citiesById[6] ='Dallas';
+citiesById[7] ='Denver';
+citiesById[8] ='Duluth';
+citiesById[9] ='El Paso';
+citiesById[10] ='Helena';
+citiesById[11] ='Houston';
+citiesById[12] ='Kansas City';
+citiesById[13] ='Las Vegas';
+citiesById[14] ='Little Rock';
+citiesById[15] ='Los Angeles';
+citiesById[16] ='Miami';
+citiesById[17] ='Montreal';
+citiesById[18] ='Nashville';
+citiesById[19] ='New Orleans';
+citiesById[20] ='New York City';
+citiesById[21] ='Oklahoma City';
+citiesById[22] ='Omaha';
+citiesById[23] ='Phoenix';
+citiesById[24] ='Pittsburgh';
+citiesById[25] ='Portland';
+citiesById[26] ='Raleigh';
+citiesById[27] ='Salt Lake City';
+citiesById[28] ='San Francisco';
+citiesById[29] ='Santa Fe';
+citiesById[30] ='Sault Ste Marie';
+citiesById[31] ='Seattle';
+citiesById[32] ='St Louis';
+citiesById[33] ='Toronto';
+citiesById[34] ='Vancouver';
+citiesById[35] ='Washington, DC';
+citiesById[36] ='Winnipeg';
+
+
+
+
+var stations = new Array();
+stations.push([0,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,1,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,3,Infinity,6]);
+stations.push([2,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,4,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,4,Infinity,1,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,4,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,4,5,Infinity,Infinity,Infinity,3,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,0,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,6,Infinity,Infinity,4]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,0,Infinity,6,Infinity,Infinity,Infinity,5,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,4,Infinity,Infinity,Infinity,4,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,4]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,1,Infinity,Infinity,6,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,1,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,3,3,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,6,Infinity,Infinity,Infinity,2,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([5,Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,Infinity,3,Infinity,Infinity,Infinity]);
+stations.push([1,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity]);
+stations.push([4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,3,Infinity,6,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,0,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,2,4,Infinity,Infinity,Infinity,Infinity,2,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,4,Infinity,4,2,Infinity,5,Infinity,1,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,2,Infinity,Infinity,Infinity,0,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,5,2,Infinity,2,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,6,5,Infinity,Infinity,1,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([2,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,3,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,6,Infinity,0,5,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,5,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,2,Infinity,Infinity,6]);
+stations.push([Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,1,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,1,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,2,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,0,Infinity,Infinity,Infinity]);
+stations.push([Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,1,Infinity,Infinity,0,Infinity,Infinity]);
+stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,2,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity]);
+stations.push([Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,4,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,0]);
+
+var dist = new Array();
+
+var route = new Array();
+
+for(i=0;i<stations.length;i++) {
+    dist[i] = new Array();
+    route[i] = new Array();
+    for(j=0;j<stations.length;j++) {
+        dist[i][j] = stations[i][j];
+        route[i][j] = new Array();
+        route[i][j].push(i);
+    }
+}
+
+console.log(dist);
+
+for(k=0;k<stations.length;k++) {
+    for(i=0;i<stations.length;i++) {
+        for(j=0;j<stations.length;j++) {
+            if( dist[i][k] + dist[k][j] < dist[i][j] )
+            {
+                dist[i][j] = dist[i][k] + dist[k][j];
+                route[i][j].push(k);
+            }
+        
+        }
+        route[i][j].push();
+    }
+}
+
+for(i=0;i< route[0][1].length;i++)
+{
+    j = route[0][1][i]+1;
+    console.log(citiesById[j]);
+
+
+}
+
+console.log(citiesById[2]);
+
+
+*/
