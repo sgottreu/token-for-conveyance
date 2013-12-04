@@ -1,44 +1,99 @@
+
+
+
+
+
+var citiesById = new Array();
+citiesById[1] ='Atlanta';
+citiesById[2] ='Boston';
+citiesById[3] ='Calgary';
+citiesById[4] ='Charleston';
+citiesById[5] ='Chicago';
+citiesById[6] ='Dallas';
+citiesById[7] ='Denver';
+citiesById[8] ='Duluth';
+citiesById[9] ='El Paso';
+citiesById[10] ='Helena';
+citiesById[11] ='Houston';
+citiesById[12] ='Kansas City';
+citiesById[13] ='Las Vegas';
+citiesById[14] ='Little Rock';
+citiesById[15] ='Los Angeles';
+citiesById[16] ='Miami';
+citiesById[17] ='Montreal';
+citiesById[18] ='Nashville';
+citiesById[19] ='New Orleans';
+citiesById[20] ='New York City';
+citiesById[21] ='Oklahoma City';
+citiesById[22] ='Omaha';
+citiesById[23] ='Phoenix';
+citiesById[24] ='Pittsburgh';
+citiesById[25] ='Portland';
+citiesById[26] ='Raleigh';
+citiesById[27] ='Salt Lake City';
+citiesById[28] ='San Francisco';
+citiesById[29] ='Santa Fe';
+citiesById[30] ='Sault Ste Marie';
+citiesById[31] ='Seattle';
+citiesById[32] ='St Louis';
+citiesById[33] ='Toronto';
+citiesById[34] ='Vancouver';
+citiesById[35] ='Washington, DC';
+citiesById[36] ='Winnipeg';
+
+
+function shortestPath(edges, numVertices, startVertex) {
+  var done = new Array(numVertices);
+  done[startVertex] = true;
+  var pathLengths = new Array(numVertices);
+  var predecessors = new Array(numVertices);
+  for (var i = 0; i < numVertices; i++) {
+    pathLengths[i] = edges[startVertex][i];
+    if (edges[startVertex][i] != Infinity) {
+      predecessors[i] = startVertex;
+    }
+  }
+  pathLengths[startVertex] = 0;
+  for (var i = 0; i < numVertices - 1; i++) {
+    var closest = -1;
+    var closestDistance = Infinity;
+    for (var j = 0; j < numVertices; j++) {
+      if (!done[j] && pathLengths[j] < closestDistance) {
+        closestDistance = pathLengths[j];
+        closest = j;
+      }
+    }
+    done[closest] = true;
+    for (var j = 0; j < numVertices; j++) {
+      if (!done[j]) {
+        var possiblyCloserDistance = pathLengths[closest] + edges[closest][j];
+        if (possiblyCloserDistance < pathLengths[j]) {
+          pathLengths[j] = possiblyCloserDistance;
+          predecessors[j] = closest;
+        }
+      }
+    }
+  }
+  return { "startVertex": startVertex,
+           "pathLengths": pathLengths,
+           "predecessors": predecessors };
+}
+
+function constructPath(shortestPathInfo, endVertex) {
+  var path = [];
+  while (endVertex != shortestPathInfo.startVertex) {
+    path.unshift(endVertex);
+    endVertex = shortestPathInfo.predecessors[endVertex];
+  }
+  return path;
+}
+
 var routes = new Array();
-/*
-routes.push([0,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,1,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,3,Infinity,6]);
-routes.push([2,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,4,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,4,Infinity,1,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,4,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,4,5,Infinity,Infinity,Infinity,3,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,0,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,6,Infinity,Infinity,4]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,0,Infinity,6,Infinity,Infinity,Infinity,5,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,4,Infinity,Infinity,Infinity,4,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,4]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,1,Infinity,Infinity,6,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,1,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,3,3,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,6,Infinity,Infinity,Infinity,2,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([5,Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,Infinity,3,Infinity,Infinity,Infinity]);
-routes.push([1,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity]);
-routes.push([4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,3,Infinity,6,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,0,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,2,4,Infinity,Infinity,Infinity,Infinity,2,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,4,Infinity,4,2,Infinity,5,Infinity,1,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,2,Infinity,Infinity,Infinity,0,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,5,2,Infinity,2,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,6,5,Infinity,Infinity,1,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([2,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,3,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,6,Infinity,0,5,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,5,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,2,Infinity,Infinity,6]);
-routes.push([Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,1,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,1,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,2,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,0,Infinity,Infinity,Infinity]);
-routes.push([Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,1,Infinity,Infinity,0,Infinity,Infinity]);
-routes.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,2,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity]);
-routes.push([Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,4,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,0]);
-*/
 
-
+for(x=0;x<36;x++)
+{
+	routes[x] = new Array();
+}
 
 routes[0][0] = 0;
 routes[0][1] = Infinity;
@@ -1338,263 +1393,25 @@ routes[35][34] = Infinity;
 routes[35][35] = 0;
 
 
-
-exports.getRoutes = function() { return routes; }
-
-
-
-
-exports.getShortestRoute = function(graph, source, target, cities) { // graph = getRoutes = array(), source = index of originating city
+var start = 15;
+    var end = 33;
     
-    var dist = new Array();
-    var previous = new Array();
-    var route;
+    // Compute the shortest paths from vertex number 1 to each other vertex
+    // in the graph.
+    var shortestPathInfo = shortestPath(routes, 36, start);
+ console.log(  shortestPathInfo); 
+    // Get the shortest path from vertex 1 to vertex 6.
+    var path0to6 = constructPath(shortestPathInfo, end);
     
-    for(v=0;v<graph.length;v++) {
-        dist[v] = Infinity;
-        previous[v] = undefined;
-    }   
-
-    dist[String(Number(source))] = 0 ;  
+    console.log('start: '+start);
     
-    console.log('source',source);
-    
-    var q = graph;
-    var vertex;
-    
-    console.log('Setting dist variable.');
-    console.log(dist);
-    
-    while(q.length > 0)
+    for(x=0;x<path0to6.length;x++)
     {
-        u = Infinity;
-        for(t=0;t<dist.length;t++)
-        {
-            //console.log(q[String(Number(t))]);
-            if(dist[t] < u && q[t] !== undefined) 
-            {
-                u = t;
-            }
+        if(x<path0to6.length-1) {
+            console.log('next: '+path0to6[x]);
+        } else {
+            console.log('end: '+path0to6[x]);
         }
-        console.log('u',u);
-        
-        vertex = q[u];
-        
-        //console.log(dist);
-        console.log('vertex',u);
-        console.log('Min distance: '+dist[u]);
-        console.log(cities[u+1]);
-        
-        q[u] = undefined;
-                
-        if(u == target) {
-            route = getSequence(previous, target);
-            
-            console.log(route);
-            break;
-        }
-        
-        if(dist[u] === Infinity)
-        {
-            break;
-        }
-console.log(previous);
-        for (v in vertex)
-        {
-            if (String(Number(v)) === v && vertex.hasOwnProperty(v)) 
-            {
-                if(vertex[v] !== Infinity && vertex[v] != 0)// && !inArray(v, previous))
-                {
-console.log('Looking at: '+cities[Number(v)+1]);
-console.log('vertex',v);
-console.log('with distance of: '+vertex[v]);
-
-
-                    var alt = dist[u] + vertex[v]; // vertex[v] = distance between v & u
-
-
-
-console.log('dist[u]',dist[u]);
-console.log('vertex[v]',vertex[v]);
-
- console.log('alt', alt);                   
- 
- 
-                    if(alt < dist[v])
-                    {
-                        dist[Number(v)] = alt;
-                        previous[Number(v)] = u;
-                        //q[v][u] = 0;
-                    }
-                    
-                }
-            }
-            
-        }
-        
-        
-        
-    }    
-    
-    
-    
-    function getSequence(previous, target)
-    {
-        console.log('previous', previous);
-        console.log(target);
-        
-        var sequence = new Array();
-        var u = target
-        
-        while(previous[u] !== undefined)
-        {
-            sequence.push(u);
-            u = previous[u];
-        }
-        
     }
     
-    function inArray(needle, haystack) {
-        var key;
-        for(key in haystack) {
-            if (String(Number(key)) === key && vertex.hasOwnProperty(key)) 
-            {
-                if(key == needle) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    
-    return { distance: dist, route: previous } ;
-}
-
-
-
-
-/*
-
-
-
-var citiesById = new Array();
-citiesById[1] ='Atlanta';
-citiesById[2] ='Boston';
-citiesById[3] ='Calgary';
-citiesById[4] ='Charleston';
-citiesById[5] ='Chicago';
-citiesById[6] ='Dallas';
-citiesById[7] ='Denver';
-citiesById[8] ='Duluth';
-citiesById[9] ='El Paso';
-citiesById[10] ='Helena';
-citiesById[11] ='Houston';
-citiesById[12] ='Kansas City';
-citiesById[13] ='Las Vegas';
-citiesById[14] ='Little Rock';
-citiesById[15] ='Los Angeles';
-citiesById[16] ='Miami';
-citiesById[17] ='Montreal';
-citiesById[18] ='Nashville';
-citiesById[19] ='New Orleans';
-citiesById[20] ='New York City';
-citiesById[21] ='Oklahoma City';
-citiesById[22] ='Omaha';
-citiesById[23] ='Phoenix';
-citiesById[24] ='Pittsburgh';
-citiesById[25] ='Portland';
-citiesById[26] ='Raleigh';
-citiesById[27] ='Salt Lake City';
-citiesById[28] ='San Francisco';
-citiesById[29] ='Santa Fe';
-citiesById[30] ='Sault Ste Marie';
-citiesById[31] ='Seattle';
-citiesById[32] ='St Louis';
-citiesById[33] ='Toronto';
-citiesById[34] ='Vancouver';
-citiesById[35] ='Washington, DC';
-citiesById[36] ='Winnipeg';
-
-
-
-
-var stations = new Array();
-stations.push([0,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,1,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,3,Infinity,6]);
-stations.push([2,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,4,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,4,Infinity,1,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,4,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,4,5,Infinity,Infinity,Infinity,3,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,0,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,6,Infinity,Infinity,4]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,0,Infinity,6,Infinity,Infinity,Infinity,5,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,4,Infinity,Infinity,Infinity,4,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,4]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,1,Infinity,Infinity,6,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,1,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,3,3,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,6,Infinity,Infinity,Infinity,2,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([5,Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,Infinity,3,Infinity,Infinity,Infinity]);
-stations.push([1,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity]);
-stations.push([4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,3,Infinity,6,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,0,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,2,4,Infinity,Infinity,Infinity,Infinity,2,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,4,Infinity,4,2,Infinity,5,Infinity,1,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,4,Infinity,2,Infinity,Infinity,Infinity,0,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,5,2,Infinity,2,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,6,5,Infinity,Infinity,1,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([2,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,3,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,6,Infinity,0,5,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,5,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,2,Infinity,Infinity,6]);
-stations.push([Infinity,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,1,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,1,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,2,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,5,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,4,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,0,Infinity,Infinity,Infinity]);
-stations.push([Infinity,Infinity,3,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,1,Infinity,Infinity,0,Infinity,Infinity]);
-stations.push([Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,2,Infinity,Infinity,Infinity,2,Infinity,2,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,0,Infinity]);
-stations.push([Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,4,Infinity,4,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,Infinity,6,Infinity,Infinity,Infinity,Infinity,Infinity,0]);
-
-var dist = new Array();
-
-var route = new Array();
-
-for(i=0;i<stations.length;i++) {
-    dist[i] = new Array();
-    route[i] = new Array();
-    for(j=0;j<stations.length;j++) {
-        dist[i][j] = stations[i][j];
-        route[i][j] = new Array();
-        route[i][j].push(i);
-    }
-}
-
-console.log(dist);
-
-for(k=0;k<stations.length;k++) {
-    for(i=0;i<stations.length;i++) {
-        for(j=0;j<stations.length;j++) {
-            if( dist[i][k] + dist[k][j] < dist[i][j] )
-            {
-                dist[i][j] = dist[i][k] + dist[k][j];
-                route[i][j].push(k);
-            }
-        
-        }
-        route[i][j].push();
-    }
-}
-
-for(i=0;i< route[0][1].length;i++)
-{
-    j = route[0][1][i]+1;
-    console.log(citiesById[j]);
-
-
-}
-
-console.log(citiesById[2]);
-
-
-*/
+    console.log(path0to6);
